@@ -1,0 +1,138 @@
+@prefix : <> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix sdmx: <http://purl.org/linked-data/sdmx#> .
+
+<{dataset}>
+  a qb:DataSet, prov:Entity ;
+  ; rdfs:label "{datasetLabel}"
+  ; qb:structure <{structure}>
+  # SHOULD
+  ; prov:generatedAtTime "{dateTime}"^^xsd:dateTime
+  ; prov:wasAttributedTo <{webId}>
+  ; prov:wasDerivedFrom <{resource}>
+  .
+
+<{structure}>
+  a qb:DataStructureDefinition
+  ; rdfs:label "{structureLabel}"
+  ; qb:component+ {component}
+  # SHOULD
+  ; prov:generatedAtTime "{dateTime}"^^xsd:dateTime
+  ; prov:wasAttributedTo <{webId}>
+  ; prov:wasDerivedFrom <{resource}>
+  .
+
+<{component}>
+  a qb:ComponentSpecification
+  ; rdfs:label "{ComponentSpecificationLabel}"
+  ; qb:componentProperty {dimensionProperty|measureProperty|attributeProperty}
+  ; qb:dimension {dimensionProperty}
+  .
+
+<{dimensionProperty}>
+  a qb:DimensionProperty, qb:ComponentProperty, rdf:Property
+  ; rdfs:label "{dimensionPropertyLabel}"
+  # SHOULD
+  ; a qb:CodedProperty
+  ; qb:codeList {codeList}
+  ; qb:concept {concept}
+  ; rdfs:subPropertyOf {superDimensionProperty}
+  ; rdfs:range {class}
+  # MAY
+  ; qb:order "{positiveInteger}"^^<http://www.w3.org/2001/XMLSchema#integer>
+  .
+
+<{measureProperty}>
+  a qb:MeasureProperty, qb:ComponentProperty rdf:Property
+  ; rdfs:label "{measurePropertyLabel}"
+  # SHOULD
+  ; qb:concept {concept}
+  ; rdfs:subPropertyOf {superMeasureProperty}
+  .
+
+<{attributeProperty}>
+  a qb:AttributeProperty, qb:ComponentProperty rdf:Property
+  ; rdfs:label "{attributePropertyLabel}"
+  # SHOULD
+  ; qb:concept {concept}
+  ; rdfs:subPropertyOf {superAttributeProperty}
+  ; qb:componentRequired "true"^^xsd:boolean;
+  .
+
+{conceptScheme}
+  a skos:ConceptScheme
+  ; skos:prefLabel "{conceptLabel}"
+  # SHOULD
+  ; skos:hasTopConcept {concept}
+  # MAY
+  ; skos:notation "{notation}"
+  ; skos:definition "{definition}"
+  ; owl:versionInfo "{version}"
+  .
+
+{concept}
+  a skos:Concept, rdfs:Class
+  ; skos:prefLabel "{conceptLabel}"
+  # SHOULD
+  ; skos:topConceptOf {conceptScheme}
+  ; skos:inScheme {conceptScheme}
+  # MAY
+  ; skos:notation "{notation}"
+  ; skos:definition "{definition}"
+  ; owl:versionInfo "{version}"
+  .
+
+{codeList}
+  a skos:ConceptScheme
+  ; skos:prefLabel "{conceptLabel}"
+  # SHOULD
+  ; a sdmx:CodeList
+  ; skos:hasTopConcept {code}
+  ; rdfs:seeAlso {class}
+  # MAY
+  ; skos:notation "{notation}"
+  ; skos:definition "{definition}"
+  ; owl:versionInfo "{version}"
+  .
+
+{code}
+  a skos:Concept, rdfs:Class
+  ; skos:prefLabel "{codeLabel}"
+  # SHOULD
+  a sdmx:Concept
+  ; skos:topConceptOf {codeList}
+  ; skos:inScheme {conceptScheme}
+  ; rdfs:seeAlso {class}
+  # MAY
+  ; skos:notation "{notation}"
+  ; skos:definition "{definition}"
+  ; owl:versionInfo "{version}"
+  .
+
+{class}
+  a rdfs:Class, owl:Class
+  ; rdfs:label "{classLabel}"
+  .
+
+{observation}
+  a qb:Observation
+  ; qb:dataSet {dataset}
+  ; {dimensionProperty}+ {dimensionValue}
+  ; {measureProperty}+ {measureValue}
+  # MAY
+  ; {dimensionProperty}+ {attributeValue}
+  .
+
+<{provActivity}>
+  a prov:Activity ;
+  ; prov:generated <{dataset|structure}> ;
+  ; prov:startedAtTime "{dateTime}"^^xsd:dateTime ;
+  ; prov:used+ <{resource|dataset|script}>
+  ; prov:wasAssociatedWith <{webId}>
+  .
+
+<{webId}>
+  a prov:Agent
+  .
