@@ -45,7 +45,7 @@
   .
 
 <{measureProperty}>
-  a qb:MeasureProperty, qb:ComponentProperty rdf:Property
+  a qb:MeasureProperty, qb:ComponentProperty, rdf:Property
   ; rdfs:label "{measurePropertyLabel}"
   # SHOULD
   ; qb:concept {concept}
@@ -53,7 +53,7 @@
   .
 
 <{attributeProperty}>
-  a qb:AttributeProperty, qb:ComponentProperty rdf:Property
+  a qb:AttributeProperty, qb:ComponentProperty, rdf:Property
   ; rdfs:label "{attributePropertyLabel}"
   # SHOULD
   ; qb:concept {concept}
